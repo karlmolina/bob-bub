@@ -37,8 +37,8 @@ void setup() {
 void draw() {
   //background(0);
   if (frameCount % 50 == 0) {
-    fill(0.1, 0, 0, .01);
-    rect(0, 0, height, width);
+    //fill(0.1, 0, 0, .01);
+    //rect(0, 0, height, width);
   }
 
   for (Bob b : bobs) {
@@ -52,24 +52,28 @@ void draw() {
 
 
 class Bob {
-  PVector x, v, futureV;
+  PVector x, v, a;
 
   int distance = 100;
   float sightAngle = radians(30);
 
-  float hue;
   float maxSize = 0.3;
   float size = 0;
   float sizeChange = 0.001;
+  
+  float hue;
   float hueChange = 0.001;
-  float hueMax = 0.2;
-  float hueMin = 0;
+  float hueMax = 0.67;
+  float hueMin = 0.5;
+  
   float elbowRoom = 4;
+  
   int framesUntilShow = 0;
 
   Bob() {
     x = new PVector(random(0, width), random(0, height));
     v = PVector.random2D();
+    a = new PVector();
     hue = random(hueMin, hueMax);
   }
 
@@ -112,19 +116,21 @@ class Bob {
       PVector sub = PVector.sub(b.x, x);
       float angle = PVector.angleBetween(sub, v);
       if (angle < sightAngle && PVector.dist(b.x, x) < distance) {
-        PVector a = PVector.sub(b.x, x);
+        PVector c = PVector.sub(b.x, x);
         //println(a);
-        a.mult(0.01);
-        v.add(a);
+        c.mult(0.1);
+        a.add(c);
       }
 
       if (PVector.dist(b.x, x) < elbowRoom) {
-        PVector a = PVector.sub(x, b.x);
-        a.mult(0.01);
-        v.add(a);
+        PVector c = PVector.sub(x, b.x);
+        c.mult(1);
+        a.add(c);
       }
     }
-
+    
+    a.limit(0.1);
+    v.add(a);
     v.limit(1);
     x.add(v);
 
