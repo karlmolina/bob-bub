@@ -47,7 +47,7 @@ class Bob {
   PVector x, v, futureV;
   
   int distance = 30;
-  int angle = 15;
+  float angle = radians(15);
 
   Bob() {
     x = new PVector(random(0, 500), random(0, 500));
@@ -56,12 +56,13 @@ class Bob {
 
   void show() {
     ellipse(x.x, x.y, 10, 10);
-    PVector sight = v.copy();
-    sight.rotate(radians(angle));
-    PVector line1 = PVector.add(x, sight).mult(distance);
+    PVector sub = v.copy();
+    //PVector sub = PVector.sub(v, x);
+    sub.rotate(angle);
+    PVector line1 = PVector.add(x, sub.mult(distance));
     line(x.x, x.y, line1.x, line1.y);
-    sight.rotate(radians(-angle));
-    PVector line2 = PVector.add(x, sight).mult(distance);
+    sub.rotate(-2*angle);
+    PVector line2 = PVector.add(x, sub);
     line(x.x, x.y, line2.x, line2.y);
     
     
